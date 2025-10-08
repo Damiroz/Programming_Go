@@ -71,14 +71,6 @@ GET /health - проверка работоспособности сервиса
 curl -i http://localhost:8080/tasks/1
 ```
 
-Tasks Management
-
-• GET    /api/tasks        → Получить список всех задач
-• POST   /api/tasks        → Создать новую задачу  
-• GET    /api/tasks/{id}   → Получить задачу по ID
-• PUT    /api/tasks/{id}   → Обновить задачу по ID
-• DELETE /api/tasks/{id}   → Удалить задачу по ID
-
 - Создание задачи
 ```bash
 curl -X POST http://localhost:8080/api/tasks \
@@ -133,6 +125,7 @@ curl -X DELETE http://localhost:8080/api/tasks/1
 Организация корректной валидации входных данных (обработка пустых полей, неверных форматов)
 Реализация обработки preflight OPTIONS-запросов для CORS
 Оптимизация структуры хранения данных в памяти с использованием map и счетчика
+
 
 
 
