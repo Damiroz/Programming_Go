@@ -4,12 +4,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+
 	"time"
 
+	"github.com/Damiroz/myapp/internal/app/handlers"
 	"github.com/Damiroz/myapp/utils"
 )
-
-import "github.com/Damiroz/myapp/internal/app/handlers"
 
 type pingResp struct {
 	Status string `json:"status"`
@@ -38,7 +38,7 @@ func Run() {
 	})
 
 	mux.HandleFunc("/ping", handlers.Ping)
-	
+
 	// Пример JSON-ручки: /ping
 	mux.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
 		utils.LogRequest(r)
@@ -56,10 +56,10 @@ func Run() {
 
 	handler := withRequestID(mux)
 
-utils.LogInfo("Server is starting on :8080")
-if err := http.ListenAndServe(":8080", handler); err != nil {
-	utils.LogError("server error: " + err.Error())
-}
+	utils.LogInfo("Server is starting on :8080")
+	if err := http.ListenAndServe(":8080", handler); err != nil {
+		utils.LogError("server error: " + err.Error())
+	}
 
 	utils.LogInfo("Server is starting on :8080")
 	if err := http.ListenAndServe(":8080", mux); err != nil {
