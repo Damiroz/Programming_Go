@@ -52,7 +52,7 @@ curl -i -X POST http://localhost:8080/tasks \
 curl -i http://localhost:8080/tasks/abc
 ```
 
-#Структура проекта
+# Структура проекта
 ```bash
 pz3-http/
 ├── cmd/
@@ -68,5 +68,6 @@ pz3-http/
 ├── go.mod
 └── requests.md
 ```
+
 
 
