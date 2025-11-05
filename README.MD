@@ -81,7 +81,8 @@ go get github.com/joho/godotenv
    1. func (r *Repo) ListDone(ctx context.Context, done bool) ([]Task, error);
    2. func (r *Repo) FindByID(ctx context.Context, id int) (*Task, error);
    3. Массовая вставква CreateMany(ctx, titles []string) error через транзакцию
-![Скриншот проверочных заданий](scrins/Скрин4.jpg)
+
+   ![Скриншот проверочных заданий](scrins/Скрин4.jpg)
 
 
 # 3. Объяснение настроек пула + Краткие ответы.
