@@ -77,7 +77,7 @@ go get github.com/joho/godotenv
 # 2.3. Вывод SELECT * FROM tasks; в psql
 ![Скриншот SELECT из psql](/Users/damiribraimov/Downloads/Скрин3.jpg)
 
-# 2.3. Вывод SELECT * FROM tasks; в psql
+# 2.4. Дополнительный функционал
  1)func (r *Repo) ListDone(ctx context.Context, done bool) ([]Task, error);
  2)func (r *Repo) FindByID(ctx context.Context, id int) (*Task, error);
  3)Массовая вставква CreateMany(ctx, titles []string) error через транзакцию
@@ -108,4 +108,5 @@ go get github.com/joho/godotenv
    - Настройки Пула: Настройки (MaxOpenConns=10, MaxIdleConns=5) выбраны для баланса. 
      Они позволяют обрабатывать до 10 одновременных запросов, сохраняя 5 соединений в простое для быстрого отклика, 
      не перегружая локальный сервер БД.
+
 
