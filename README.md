@@ -38,11 +38,11 @@ curl -s -X PATCH http://localhost:8080/api/v1/notes/691f49c977027d5a62c39e76 \
   -H "Content-Type: application/json" \
   -d '{"content":"Updated content"}'
 ```
-![screen5](image8.png)
+![screen5](image5.png)
 ```
 curl -i -X DELETE http://localhost:8080/api/v1/notes/691f49c977027d5a62c39e76
 ```
-![screen6](image9.png)
+![screen7](image7.png)
 
 ## Типовые ошибки и их отладка:
 
