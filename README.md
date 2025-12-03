@@ -23,6 +23,7 @@ curl -X POST http://localhost:8080/api/v1/notes \
   -H "Content-Type: application/json" \
   -d '{"title":"Первая заметка","content":"Содержание заметки"}' | jq
 ```
+```
 ![screen2](image2.png)
 ```
 curl -s http://localhost:8080/api/v1/notes?limit=5&skip=0&q=first
