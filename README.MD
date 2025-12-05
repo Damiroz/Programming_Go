@@ -15,17 +15,26 @@
 
 ## Структура проекта
 
-```
-practica9/
-  cmd/api/main.go
-  internal/http/handlers/auth.go
-  internal/core/user.go
-  internal/repo/postgres.go
-  internal/repo/user_repo.go
-  internal/platform/config/config.go
-  docker-compose.yml
-  go.sum
-  go.mod
+```bash
+.
+├── cmd
+│   └── api
+│       └── main.go
+├── docker-compose.yml
+├── go.mod
+├── go.sum
+└── internal
+    ├── core
+    │   └── user.go
+    ├── http
+    │   └── handlers
+    │       └── auth.go
+    ├── platform
+    │   └── config
+    │       └── config.go
+    └── repo
+        ├── postgres.go
+        └── user_repo.go
 ```
 
 - **cmd/api/main.go:** Точка входа, маршруты, запуск HTTP-сервера.
