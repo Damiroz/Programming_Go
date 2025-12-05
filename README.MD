@@ -35,14 +35,31 @@
     └── repo
         ├── postgres.go
         └── user_repo.go
-```
 
-- **cmd/api/main.go:** Точка входа, маршруты, запуск HTTP-сервера.
-- **internal/http/handlers/auth.go:** Register и Login, валидация и bcrypt.
-- **internal/core/user.go:** Модель пользователя для БД (email уникален).
-- **internal/repo/postgres.go:** Инициализация GORM с DSN.
-- **internal/repo/user_repo.go:** Репозиторий пользователей, AutoMigrate, Create, ByEmail.
-- **internal/platform/config/config.go:** Конфигурация окружения (DB_DSN, BCRYPT_COST, APP_ADDR).
+```
+bash
+.
+├── cmd
+│   └── api
+│       └── main.go: Точка входа, маршруты, запуск HTTP-сервера.
+
+└── internal
+    ├── core
+    │   └── user.go Модель пользователя для БД (email уникален).
+
+└── internal
+    ├── http
+    │   └── handlers
+    │       └── auth.go  Register и Login, валидация и bcrypt.
+
+└── internal
+    └── repo
+        ├── postgres.go  Инициализация GORM с DSN.
+        └── user_repo.go Репозиторий пользователей, AutoMigrate, Create, ByEmail.
+└── internal
+    ├── platform
+    │   └── config 
+    │       └── config.go Конфигурация окружения (DB_DSN, BCRYPT_COST, APP_ADDR).
 
 ---
 
