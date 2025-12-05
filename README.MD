@@ -19,49 +19,23 @@
 .
 ├── cmd
 │   └── api
-│       └── main.go
-├── docker-compose.yml
+│       └── main.go //Точка входа, маршруты, запуск HTTP-сервера.
+├── docker-compose.yml //Контейнер с PostgreSQL
 ├── go.mod
 ├── go.sum
 └── internal
     ├── core
-    │   └── user.go
+    │   └── user.go //Модель пользователя для БД.
     ├── http
     │   └── handlers
-    │       └── auth.go
+    │       └── auth.go //Register и Login, валидация и bcrypt.
     ├── platform
     │   └── config
-    │       └── config.go
+    │       └── config.go //Конфигурация окружения.
     └── repo
-        ├── postgres.go
-        └── user_repo.go
-
+        ├── postgres.go //Инициализация GORM с DSN.
+        └── user_repo.go //Репозиторий пользователей, AutoMigrate, Create, ByEmail.
 ```
-bash
-.
-├── cmd
-│   └── api
-│       └── main.go: Точка входа, маршруты, запуск HTTP-сервера.
-
-└── internal
-    ├── core
-    │   └── user.go Модель пользователя для БД (email уникален).
-
-└── internal
-    ├── http
-    │   └── handlers
-    │       └── auth.go  Register и Login, валидация и bcrypt.
-
-└── internal
-    └── repo
-        ├── postgres.go  Инициализация GORM с DSN.
-        └── user_repo.go Репозиторий пользователей, AutoMigrate, Create, ByEmail.
-└── internal
-    ├── platform
-    │   └── config 
-    │       └── config.go Конфигурация окружения (DB_DSN, BCRYPT_COST, APP_ADDR).
-
----
 
 ## Настройка окружения и подключение к БД
 
