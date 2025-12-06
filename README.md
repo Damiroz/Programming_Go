@@ -172,6 +172,7 @@ curl -X POST http://localhost:8080/api/v1/notes \
 -d '{"title":"Первая заметка", "content":"Это тест"}'
 
 ```
+![screen2](image2.png)
 
 #### Контрольные вопросы и ответы
 
