@@ -40,7 +40,7 @@ go mod init example.com/notes-api
 go get github.com/go-chi/chi/v5
 ```
 
-**Коды**
+## Коды
 
 ### Модель данных
 
