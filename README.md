@@ -1,199 +1,124 @@
-### Проектирование REST API (CRUD для заметок). Разработка структуры
-### Ибраимов Дамир Эльдарович, ПИМО-01-25.
+### Практика 12. Ибраимов Дамир ПИМО-01-25. Подключение Swagger/OpenAPI. Автоматическая генерация документации.
 
-#### Суть практической 
-   Освоить принципы проектирования REST API.
-   Спроектировать и реализовать CRUD-интерфейс (Create, Read, Update, Delete) для сущности «Заметка».
-   Подготовить основу для интеграции с базой данных и JWT-аутентификацией
 
-#### Структура проекта
+### Цели на практику:
 
-```bash
+1.	Освоить основы спецификации OpenAPI (Swagger) для REST API.
+2.	Подключить автогенерацию документации к проекту из ПЗ 11 (notes-api).
+3.	Научиться публиковать интерактивную документацию (Swagger UI / ReDoc) на эндпоинте GET /docs.
+4.	Синхронизировать код и спецификацию (комментарии-аннотации → генерация) и/или «schema-first» (генерация кода из openapi.yaml).
+
+### Краткое описание подхода:
+
+Подход **code-first** означает что разработка API начинается с написания кода приложения а документация и спецификация генерируются автоматически на основе комментариев и аннотаций в исходных файлах разработчик описывает маршруты модели и обработчики прямо в коде а затем инструмент вроде swaggo создает swagger json и интерфейс Swagger UI таким образом документация всегда соответствует актуальному состоянию реализации и обновляется при изменениях в коде что упрощает поддержку и снижает риск рассинхронизации между описанием и фактическим поведением сервиса
+
+### Структура проекта
+
+```
 notes-api/
-├── cmd/
-│   └── api/
-│       └── main.go                 # Точка входа в приложение. Инициализирует репозитории, обработчики и запускает HTTP-сервер.
-├── internal/                       # Приватный код, который не должен импортироваться внешними проектами (бизнес-логика, реализация).
-│   ├── api/
-│   │   └── openapi.yaml            # Спецификация REST API в формате OpenAPI (Swagger). Документация для клиентских разработчиков.
-│   ├── core/                       # Слой бизнес-сущностей и интерфейсов (абстракций).
-│   │   ├── note.go                 # Определение структуры (модели) Note (Заметка) — ключевой сущности приложения.
-│   │   └── service/                # Слой бизнес-логики (правила, валидация).
-│   │       └── note_service.go     # Реализация сервиса для работы с заметками. Содержит логику, вызываемую обработчиками (Handlers).
-│   ├── http/                       # Слой HTTP/API. Отвечает за взаимодействие по сети.
-│   │   ├── handlers/               # Обработчики HTTP-запросов. Транслируют HTTP-запросы в вызовы бизнес-логики (Service).
-│   │   │   └── notes.go            # Реализация CRUD-обработчиков для ресурса /notes (CreateNote, GetNote и т.д.).
-│   │   └── router.go               # Настройка маршрутизации (роутер). Определяет, какой Handler вызывается для каждого пути (URL).
-│   └── repo/                       # Слой данных (Repository). Абстрагирует работу с хранилищем.
-│       └── note_mem.go             # Реализация репозитория заметок с хранением данных в оперативной памяти (In-Memory).
-└── go.mod                          # Файл управления зависимостями Go-проекта.
+ ├─ cmd/api/main.go
+ ├─ internal/
+ │   ├─ http/
+ │   │   ├─ router.go
+ │   │   └─ handlers/notes.go
+ │   ├─ core/
+ │   │   ├─ note.go
+ │   │   └─ service/note_service.go
+ │   └─ repo/
+ │       └─ note_mem.go
+ ├─ docs/
+ │   ├─ api/
+ │   │   ├─ openapi.yaml
+ │   ├─ docs.go
+ │   ├─ swagger.json
+ │   └─ swagger.yaml
+ ├─ api/openapi.yaml
+ └─ go.mod
+ └─ go.sum
+ └─ README.md 
 ```
----
 
-#### Инструкция запуска
 
-**Подготовка проекта**  
+
+### Подготовка проекта
+
+```
+# в корне проекта notes-api
+go get github.com/swaggo/http-swagger
+go install github.com/swaggo/swag/cmd/swag@latest
+```
+
+**Проверка установки**
+
+![screen_swag](image1.png)
+
+### (ListNotes, CreateNote).
+Добавляем аннотаций над 2 методами (ListNotes, CreateNote).
 ```bash
-mkdir notes-api
-cd notes-api
-go mod init example.com/notes-api
-go get github.com/go-chi/chi/v5
+// ListNotes godoc
+// @Summary      Список заметок
+// @Description  Возвращает список заметок
+// @Tags         notes
+// @Param        page   query  int     false  "Номер страницы"
+// @Param        limit  query  int     false  "Размер страницы"
+// @Param        q      query  string  false  "Поиск по title"
+// @Success      200    {array}  core.Note
+// @Header       200    {integer}  X-Total-Count  "Общее количество"
+// @Failure      500    {object}  map[string]string
+// @Router       /notes [get]
+
+// CreateNote godoc
+// @Summary      Создать заметку
+// @Tags         notes
+// @Accept       json
+// @Produce      json
+// @Param        input  body     core.NoteCreate  true  "Данные новой заметки"
+// @Success      201    {object} core.Note
+// @Failure      400    {object} map[string]string
+// @Failure      500    {object} map[string]string
+// @Router       /notes [post]
 ```
-
-## Коды
-
-### Модель данных
-
-```go
-package core
-
-
-import "time"
-
-
-type Note struct {
-  ID        int64
-  Title     string
-  Content   string
-  CreatedAt time.Time
-  UpdatedAt *time.Time
-}
-
+### Запуск проекта
 ```
-### In-memory репозиторий
-``` go
-package repo
-import (
-  "sync"
-  "example.com/notes-api/internal/core"
-)
-type NoteRepoMem struct {
-  mu    sync.Mutex
-  notes map[int64]*core.Note
-  next  int64
-}
-
-
-func NewNoteRepoMem() *NoteRepoMem {
-  return &NoteRepoMem{notes: make(map[int64]*core.Note)}
-}
-
-
-func (r *NoteRepoMem) Create(n core.Note) (int64, error) {
-  r.mu.Lock(); defer r.mu.Unlock()
-  r.next++
-  n.ID = r.next
-  r.notes[n.ID] = &n
-  return n.ID, nil
-}
-```
-
-### HTTP-обработчик
-``` go
-package handlers
-
-
-import (
-  "encoding/json"
-  "net/http"
-  "example.com/notes-api/internal/core"
-  "example.com/notes-api/internal/repo"
-)
-type Handler struct {
-  Repo *repo.NoteRepoMem
-}
-func (h *Handler) CreateNote(w http.ResponseWriter, r *http.Request) {
-  var n core.Note
-  if err := json.NewDecoder(r.Body).Decode(&n); err != nil {
-    http.Error(w, "Invalid input", http.StatusBadRequest)
-    return
-  }
-  id, _ := h.Repo.Create(n)
-  n.ID = id
-  w.Header().Set("Content-Type", "application/json")
-  w.WriteHeader(http.StatusCreated)
-  json.NewEncoder(w).Encode(n)
-}
-```
-### Маршрутизация
-``` go
-package httpx
-
-
-import (
-  "github.com/go-chi/chi/v5"
-  "example.com/notes-api/internal/http/handlers"
-)
-
-
-func NewRouter(h *handlers.Handler) *chi.Mux {
-  r := chi.NewRouter()
-  r.Post("/api/v1/notes", h.CreateNote)
-  return r
-}
-
-``` 
-### Точка входа
-``` go
-package main
-
-
-import (
-  "log"
-  "net/http"
-  "example.com/notes-api/internal/http"
-  "example.com/notes-api/internal/http/handlers"
-  "example.com/notes-api/internal/repo"
-)
-
-
-func main() {
-  repo := repo.NewNoteRepoMem()
-  h := &handlers.Handler{Repo: repo}
-  r := httpx.NewRouter(h)
-
-
-  log.Println("Server started at :8080")
-  log.Fatal(http.ListenAndServe(":8080", r))
-}
-``` 
-
-### Запуск проекта 
-``` bash
 go run ./cmd/api
-``` 
-![screen](image1.png)
-
-
-### Создание заметки 
-``` bash
-curl -X POST http://localhost:8080/api/v1/notes \
--H "Content-Type: application/json" \
--d '{"title":"Первая заметка", "content":"Это тест"}'
-
 ```
-![screen2](image2.png)
 
-#### Контрольные вопросы и ответы
+### Генерация документов
+```
+swag init -g cmd/api/main.go -o docs
+```
+![gen_docs_swag](image2.png)
 
-1. **Что означает аббревиатура REST и в чём её суть?**  
-   - Аббревиатура: REST расшифровывается как REpresentational State Transfer (Передача репрезентативного состояния).
-   - Суть: Это архитектурный стиль для создания распределённых систем, таких как веб-сервисы. Суть REST заключается в том, что взаимодействие между клиентом и сервером происходит вокруг ресурсов (например, notes, users). Клиент взаимодействует с ресурсом, используя стандартные методы HTTP, и получает его представление (обычно в формате JSON или XML), после чего переходит в новое состояние.
+### Работающая страница Swagger UI
+![swag_UI_1](image3.png)
 
-2. **Как связаны CRUD-операции и методы HTTP?**
-    CRUD-операции напрямую сопоставляются с HTTP-методами: **Create** → \`POST\`, **Read** → \`GET\`, **Update** → \`PUT\` / \`PATCH\`, **Delete** → \`DELETE\`.
+### Проверка Swagger UI
+![swag_UI_1](image4.png)
+![swag_UI_1](image5.png)
 
-3. **Для чего нужна слоистая архитектура (handler → service → repository)?**
-    Она нужна для **разделения ответственности**, что упрощает **тестирование** и повышает **гибкость** и **поддерживаемость** кода.
 
-4. **Что означает принцип «stateless» в REST API?**
-    **Stateless** (без состояния) означает, что сервер **не хранит информацию о сессии** клиента между запросами. Каждый запрос должен содержать всю необходимую информацию для своей полной обработки.
+### Ответы на контрольные вопросы
 
-5. **Почему важно использовать стандартные коды ответов HTTP?**
-    Стандартные коды (2xx, 4xx, 5xx) обеспечивают **единообразие** и **предсказуемость**. Клиент может однозначно определить результат: успех (2xx), ошибка клиента (4xx) или ошибка сервера (5xx).
+1. Чем отличается OpenAPI от Swagger?  
+OpenAPI это спецификация для описания REST API а Swagger это набор инструментов для работы с этой спецификацией включая генерацию документации тестирование и клиентские библиотеки  
 
-6. **Как можно добавить аутентификацию в REST API?**
-    Наиболее популярный способ — использование **Bearer Токенов** (часто **JSON Web Tokens, JWT**). Токен передаётся в заголовке \`Authorization: Bearer <token>\`.
+2. В чём различие подходов code first и schema first Плюсы минусы  
+Code first означает что сначала пишется код а документация генерируется автоматически из аннотаций плюсы это простота и синхронизация с кодом минусы возможная неполнота описания Schema first означает что сначала создается спецификация а затем по ней пишется код плюсы это четкое проектирование и согласование API минусы необходимость поддерживать соответствие реализации  
 
-7. **В чём преимущество версионирования API (например, \`/api/v1/\`)?**
-    Версионирование позволяет **развивать API** и вносить несовместимые изменения (в новой версии, \`/v2/\`) без нарушения работы **старых клиентов**, которые продолжают использовать предыдущую версию (\`/v1/\`).
+3. Какие обязательные разделы содержит спецификация OpenAPI  
+Обязательные разделы включают информацию о версии спецификации блок info с метаданными API список paths с описанием маршрутов и методов а также базовый сервер или servers для указания адреса  
+
+4. Для чего нужны components.schemas и как их переиспользовать в responses  
+Components.schemas содержат определения моделей данных которые можно переиспользовать в разных местах спецификации например в responses или parameters путем ссылки на них через ref что позволяет избежать дублирования  
+
+5. Что описывают аннотации Param Success Failure Router Security  
+Аннотация Param описывает параметры запроса Success описывает успешный ответ Failure описывает ошибочный ответ Router задает путь и метод для эндпоинта Security описывает требования к авторизации и тип используемой схемы безопасности  
+
+6. Как опубликовать Swagger UI на отдельном префиксе docs и ограничить к нему доступ  
+Swagger UI можно подключить к маршруту например docs и настроить роутер чтобы отдавать интерфейс по этому пути доступ можно ограничить через middleware проверяющий авторизацию или IP адреса  
+
+7. Как поддерживать актуальность документации при изменениях кода  
+Необходимо регулярно запускать генерацию документации например swag init после изменений в коде и следить за корректностью аннотаций чтобы документация всегда соответствовала реализации  
+
+8. Как подключить Bearer аутентификацию в спецификации и что изменится в UI  
+В разделе securitySchemes спецификации добавляется схема типа http с параметром bearerAuth после этого в UI появится возможность вводить токен авторизации и все запросы будут выполняться с заголовком Authorization Bearer
