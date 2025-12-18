@@ -82,12 +82,12 @@ curl -v -X POST http://localhost:8080/notes \
 
 ### Получение заметки по айди
 ```
-curl -s http://localhost:8080/notes/4       
+curl -s http://localhost:8080/notes/1       
 ```
-![screen](./screens/image4.png)
+![screen](./screens/image5.png)
 
 ### Keyset пагинация
-![screen](./screens/image5.png)
+![screen](./screens/image6.png)
 
 ### Обновление заметки
 ```
@@ -95,20 +95,19 @@ curl -s -X PATCH http://localhost:8080/notes/1 \
   -H 'Content-Type: application/json' \
   -d '{"title":"postgres knowledge","content":"updated"}'
 ```
-![screen](./screens/image6.png)
+![screen](./screens/image7.png)
 
 ### Используем batch
 ```
 curl -s "http://localhost:8080/notes/batch?ids=1,2,3,4"
 ```
-![screen](./screens/image7.png)
+![screen](./screens/image8.png)
 
 ### Прогон нагрузки hey
 **Пагинация**
-![screen](./screens/image8.png)
+![screen](./screens/image9.png)
 
 **Получение по id**
-![screen](./screens/image9.png)
 ![screen](./screens/image10.png)
 
 ### ДО Оптимизации:
