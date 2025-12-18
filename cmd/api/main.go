@@ -1,30 +1,55 @@
 package main
 
-//go:generate swag init -g cmd/api/main.go -o docs
 import (
-	"fmt"
+	"context"
+	"log"
 	"net/http"
-	"github.com/swaggo/http-swagger"
-	_ "example.com/notes-api/docs" // ОБЯЗАТЕЛЬНО: Импорт сгенерированных доков
-	internalHttp "example.com/notes-api/internal/http"
-	
+	"os"
+	"time"
+
+
+	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/joho/godotenv"
+
+	"example.com/notes-api/internal/config"
+	"example.com/notes-api/internal/storage/postgres"
+	httptransport "example.com/notes-api/internal/http"
+	rediscache "example.com/notes-api/internal/storage/redis"
 )
 
-// @title           Notes API
-// @version         1.0
-// @description     Учебный REST API для заметок (CRUD).
-// @contact.name    Backend Course
-// @contact.email   example@university.ru
-// @BasePath        /
-
 func main() {
-	r := internalHttp.NewRouter()
+	_ = godotenv.Load()
 
-	fmt.Println("Server starting on :8080...")
-	fmt.Println("Swagger UI: http://localhost:8080/docs/index.html")
-	r.Get("/docs/*", httpSwagger.WrapHandler) // для chi: r.Get
+	cfg := config.FromEnv()
 
-	if err := http.ListenAndServe(":8080", r); err != nil {
-		panic(err)
+	pgxCfg, err := pgxpool.ParseConfig(os.Getenv("DATABASE_URL"))
+	if err != nil {
+		log.Fatal(err)
+	}
+	pgxCfg.MaxConns = 20
+	pgxCfg.MinConns = 5
+	pgxCfg.MaxConnLifetime = time.Hour
+	pgxCfg.ConnConfig.StatementCacheCapacity = 256
+
+	pool, err := pgxpool.NewWithConfig(context.Background(), pgxCfg)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer pool.Close()
+
+	repo := postgres.NewRepo(pool)
+
+	// Redis cache
+	cache, err := rediscache.New(cfg.RedisAddr, cfg.RedisPassword, cfg.RedisDB, cfg.CacheTTL)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer cache.Close()
+
+	srv := httptransport.NewServer(repo, cache)
+
+	log.Printf("listening on %s", cfg.HTTPAddr)
+	if err := http.ListenAndServe(cfg.HTTPAddr, srv.Router()); err != nil {
+		log.Fatal(err)
 	}
 }
