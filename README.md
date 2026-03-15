@@ -13,10 +13,10 @@
 
 ## Структура проекта
 
+```bash
 tech-ip-sem2/
   go.mod
   go.sum
-
   services/
     auth/
       cmd/
@@ -28,7 +28,6 @@ tech-ip-sem2/
           router.go
         service/
           auth.go
-
     tasks/
       cmd/
         tasks/
@@ -42,7 +41,6 @@ tech-ip-sem2/
       client/
         authclient/
           client.go
-
   shared/
     middleware/
       logging.go
@@ -50,7 +48,7 @@ tech-ip-sem2/
     httpx/
       client.go
 
-
+```
 ## Установка зависимостей
 
 ```bash
