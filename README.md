@@ -115,8 +115,8 @@ protoc \
 # 1. Auth (gRPC)
 
 ```bash
-export AUTH_GRPC_PORT=50052
-export AUTH_HTTP_PORT=8083
+export AUTH_GRPC_PORT=50051
+export AUTH_HTTP_PORT=8081
 go run ./services/auth/cmd/auth
 ```
 ![image](screens/image1.png)
