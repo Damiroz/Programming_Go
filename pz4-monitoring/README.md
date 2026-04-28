@@ -79,30 +79,30 @@ go get github.com/prometheus/client_golang/prometheus/promhttp
 ```bash
 go run ./cmd/server
 ```
-![image1](pz4-monitoring/screens/image1.png)
+![image1](screens/image1.png)
 
 ### 3. Проверка API
 ```bash
 curl http://localhost:8080/health
 ```
-![image2](pz4-monitoring/screens/image2.png)
+![image2](screens/image2.png)
 
 ```bash
 curl http://localhost:8080/students/1
 ```
-![image3](pz4-monitoring/screens/image3.png)
+![image3](screens/image3.png)
 
 ```bash
 curl http://localhost:8080/students/999
 ```
-![image4](pz4-monitoring/screens/image4.png)
+![image4](screens/image4.png)
 
 ```bash
 curl http://localhost:8080/metrics
 ```
-![image5](pz4-monitoring/screens/image5.png)
+![image5](screens/image5.png)
 
-![image6](pz4-monitoring/screens/image6.png)
+![image6](screens/image6.png)
 
 ### 4. Prometheus
 
@@ -111,15 +111,15 @@ curl http://localhost:8080/metrics
 ```bash
 docker compose -f "pz4-monitoring/monitoring/docker-compose.yml" up -d --build 
 ```
-![image7](pz4-monitoring/screens/image7.png)
+![image7](screens/image7.png)
 
 Заходим в http://localhost:9090/targets
 
-![image8](pz4-monitoring/screens/image8.png)
+![image8](screens/image8.png)
 
 Проверим с помощью команды 
 
-![image9](pz4-monitoring/screens/image9.png)
+![image9](screens/image9.png)
 
 ### 4. Grafana
 Запускаем вместе с Prometheus с помощью Docker.
@@ -127,11 +127,11 @@ docker compose -f "pz4-monitoring/monitoring/docker-compose.yml" up -d --build
 ```bash
 docker compose -f "pz4-monitoring/monitoring/docker-compose.yml" up -d --build 
 ```
-![image10](pz4-monitoring/screens/image10.png)
-![image11](pz4-monitoring/screens/image11.png)
+![image10](screens/image10.png)
+![image11](screens/image11.png)
 
 Подключаем Prometheus 
-![image12](pz4-monitoring/screens/image12.png)
+![image12](screens/image12.png)
 
 Далее создаем Dashboard для визуализации следующих запросов:
 - sum(app_http_requests_total) : Общее число запросов
@@ -141,8 +141,8 @@ docker compose -f "pz4-monitoring/monitoring/docker-compose.yml" up -d --build
 sum(rate(app_http_request_duration_seconds_count[1m])) : Средняя длительность
 - sum by (status_code) (app_http_errors_total) : Ошибки по статусу
 
-![image13](pz4-monitoring/screens/image13.png)
-![image14](pz4-monitoring/screens/image14.png)
+![image13](screens/image13.png)
+![image14](screens/image14.png)
 
 Генерируем нагрузку. 
 
@@ -151,8 +151,8 @@ for i in {1..20}; do curl http://localhost:8080/health; done
 for i in {1..15}; do curl http://localhost:8080/students/1; done
 for i in {1..5}; do curl http://localhost:8080/students/999; done
 ```
-![image15](pz4-monitoring/screens/image15.png)
-![image16](pz4-monitoring/screens/image16.png)
+![image15](screens/image15.png)
+![image16](screens/image16.png)
 
 ### 4. Контрольные вопросы 
 1. Что такое метрики приложения?
