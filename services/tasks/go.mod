@@ -1,3 +1,3 @@
-module example.com/tasks
+module tasks
 
 go 1.25.1
