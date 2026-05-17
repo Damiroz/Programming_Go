@@ -54,13 +54,15 @@ jobs:
 
       - name: Build Docker image
         run: |
+          USER=$(echo "${{ github.actor }}" | tr '[:upper:]' '[:lower:]')
           docker build \
-            -t ghcr.io/${{ github.actor }}/techip-tasks:${{ github.sha }} \
-            -t ghcr.io/${{ github.actor }}/techip-tasks:latest \
+            -t ghcr.io/$USER/techip-tasks:${{ github.sha }} \
+            -t ghcr.io/$USER/techip-tasks:latest \
             .
         working-directory: ./services/tasks
 
       - name: Push Docker image
         run: |
-          docker push ghcr.io/${{ github.actor }}/techip-tasks:${{ github.sha }}
-          docker push ghcr.io/${{ github.actor }}/techip-tasks:latest
+          USER=$(echo "${{ github.actor }}" | tr '[:upper:]' '[:lower:]')
+          docker push ghcr.io/$USER/techip-tasks:${{ github.sha }}
+          docker push ghcr.io/$USER/techip-tasks:latest
