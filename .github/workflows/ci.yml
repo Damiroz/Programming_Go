@@ -23,7 +23,7 @@ jobs:
         run: go version
 
       - name: Download dependencies
-        run: go mod download
+        run: go mod tidy
         working-directory: ./services/tasks
 
       - name: Run tests
