@@ -66,11 +66,8 @@ docker build -t techip-tasks:0.1 .
 docker run --rm -p 8082:8082 -e TASKS_PORT=8082 techip-tasks:0.1
 ```
 
-Скриншот 1 — сборка и запуск контейнера
+![image1](./screens/image1.png)
 
-```
-![screen1](./screens/image1.png)
-```
 
 ---
 
@@ -80,11 +77,9 @@ docker run --rm -p 8082:8082 -e TASKS_PORT=8082 techip-tasks:0.1
 curl http://localhost:8082/health
 ```
 
-Скриншот 2 — проверка health endpoint
 
-```
-![screen2](./screens/image2.png)
-```
+![image2](./screens/image2.png)
+
 
 ---
 
@@ -95,17 +90,12 @@ cd deploy
 docker compose up -d --build
 ```
 
-Скриншот 3 — запуск через Docker Compose
 
-```
-![screen3](./screens/image3.png)
-```
+![image3](./screens/image3.png)
 
-Скриншот 4 — работа сервисов
 
-```
-![screen4](./screens/image4.png)
-```
+![image4](./screens/image4.png)
+
 
 ---
 
@@ -115,11 +105,8 @@ docker compose up -d --build
 curl http://localhost:8082/health
 ```
 
-Скриншот 5 — финальная проверка
+![image5](./screens/image5.png)
 
-```
-![screen5](./screens/image5.png)
-```
 
 ---
 
