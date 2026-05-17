@@ -91,7 +91,7 @@ Repository → Settings → Secrets and variables → Actions
 ```
 
 ## Скриншот выполнения Pipeline
-![image4](./screens/log_succes.png)
+![image4](./screens/image4.png)
 
 ## Ответы на контрольные вопросы
 
