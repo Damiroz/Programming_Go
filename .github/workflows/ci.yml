@@ -60,3 +60,13 @@ jobs:
         run: |
           docker push ghcr.io/${{ secrets.REGISTRY_USERNAME }}/techip-tasks:${{ github.sha }}
           docker push ghcr.io/${{ secrets.REGISTRY_USERNAME }}/techip-tasks:latest
+      - name: Download dependencies
+        run: go mod download
+        working-directory: ./services/tasks
+      - name: Cache Go modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('services/tasks/go.sum') }}
