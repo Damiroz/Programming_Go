@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [ "main", "master", "pract24" ]
 
+permissions:
+  contents: read
+  packages: write
+
 jobs:
   test-and-build:
     runs-on: ubuntu-latest
