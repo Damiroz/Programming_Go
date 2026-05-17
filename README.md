@@ -115,7 +115,7 @@ curl -X PATCH http://localhost:8082/v1/tasks/1 \
 # Следующий GET снова даст cache miss и обновит кэш
 curl http://localhost:8082/v1/tasks/1
 ```
-![image4](./screens/image-3.png)
+![image4](./screens/image4.png)
 
 ### Валидация при удалении
 
