@@ -82,11 +82,10 @@
 
 ![1](./screens/image.png)
 
-![1.1](./screens/imagee.png)
-
 Management UI доступен по адресу http://localhost:15672
 Логин: guest, пароль: guest
 ![2](./screens/image-1.png)
+![2.1](./screens/imagee.png)
 
 ### 2. Создать очередь task_events
 
