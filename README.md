@@ -65,7 +65,7 @@ go run server.go
 curl -s http://localhost:8080/v1/tasks
 ```
 Ответ:
-![1](image.png)
+![1](screens/image.png)
 
 ### Получение одной задачи
 
@@ -74,7 +74,7 @@ curl -s http://localhost:8080/v1/tasks/t_001
 ```
 
 Ответ:
-![2](image-1.png)
+![2](screens/image-1.png)
 
 ### Создание задачи
 
@@ -85,7 +85,7 @@ curl -s -X POST http://localhost:8080/v1/tasks \
 ```
 
 Ответ:
-![3](image-2.png)
+![3](screens/image-2.png)
 
 ### Обновление задачи
 
@@ -96,7 +96,7 @@ curl -s -X PATCH http://localhost:8080/v1/tasks/t_001 \
 ```
 
 Ответ:
-![4](image-3.png)
+![4](screens/image-3.png)
 
 
 ## Шаг 3. GraphQL API — примеры запросов и ответов
@@ -123,7 +123,7 @@ query GetTask($id: ID!) {
 ```
 
 Ответ:
-![5](image-4.png)
+![5](screens/image-4.png)
 
 ### Создание задачи (требует JWT)
 
@@ -148,7 +148,7 @@ mutation Create($input: CreateTaskInput!) {
 }
 ```
 Ответ:
-![6](image-5.png)
+![6](screens/image-5.png)
 
 ### Обновление задачи (требует JWT)
 
@@ -172,7 +172,7 @@ mutation Update($id: ID!, $input: UpdateTaskInput!) {
 ```
 
 Ответ:
-![7](image-6.png)
+![7](screens/image-6.png)
 
 
 ## Шаг 5. Сравнение количества запросов
