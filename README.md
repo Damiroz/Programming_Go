@@ -1,4 +1,5 @@
-# Практическое занятие №15 — Деплой приложения на VPS. Настройка systemd. Бурылин Дмитрий ПИМО-01-25
+# Практическое занятие №15 — Деплой приложения на VPS. Настройка systemd. 
+# Ибраимов Дамир ПИМО-01-25
 
 ## Цель работы
 
@@ -9,7 +10,7 @@
 ### 1. Подключение к VPS по SSH
 
 ```bash
-ssh user@158.160.202.182
+ssh user@111.88.154.142
 ```
 ![1](./screens/image.png)
 
@@ -71,7 +72,7 @@ GOOS=linux GOARCH=amd64 go build -o bin/tasks .
 ### 7. Копирование бинарника на VPS
 
 ```bash
-scp -i ~/.ssh/id_ed25519 bin/tasks user@158.160.202.182:/tmp/tasks
+scp -i ~/.ssh/id_ed25519 bin/tasks user@111.88.154.142:/tmp/tasks
 ```
 ![8](./screens/image-7.png)
 
@@ -174,7 +175,7 @@ curl -i http://127.0.0.1:8082/health
 GOOS=linux GOARCH=amd64 go build -o bin/tasks .
 
 # 2. Скопировать на VPS
-scp -i ~/.ssh/id_ed25519 bin/tasks user@158.160.202.182:/tmp/tasks
+scp -i ~/.ssh/id_ed25519 bin/tasks user@111.88.154.142:/tmp/tasks
 
 # 3. На сервере — остановить, забэкапить, заменить, запустить
 sudo systemctl stop tasks
